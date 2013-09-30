@@ -9,8 +9,12 @@ Add your css/html to Video player controllers.
 
 ### Usage
 
-    $('.js-htip').htip({
-        // Your Settings
+    $('.hvideo').hvideo({
+        // Your settings
+        'wrap-class': 'video-wrap',
+        'fullscreen-class': 'fullscreened',
+        'playing-class': 'playing-video',
+        'volumebar-class': 'volumebar'
     });
 
 
