@@ -1,4 +1,4 @@
-#hvideo
+#hvid
 
 #### Simple HTML5 Video player styling
 
@@ -9,7 +9,7 @@ Add your css/html to Video player controllers.
 
 ### Usage
 
-    $('.hvideo').hvideo({
+    $('.hvid').hvid({
         // Your settings
         'wrap-class': 'video-wrap',
         'fullscreen-class': 'fullscreened',
