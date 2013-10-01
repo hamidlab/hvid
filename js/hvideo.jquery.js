@@ -7,10 +7,10 @@
 (function($) {
     "use strict";
     
-    $.fn.hvideo = function(options) {
-        var opts = $.extend( {}, $.fn.hvideo.defaults, options );
+    $.fn.hvid = function(options) {
+        var opts = $.extend( {}, $.fn.hvid.defaults, options );
 
-        function videoClass(video, hVideo, settings){
+        function videoClass(video, hvid, settings){
 
             var that = this;
             this.defaultVolume = 0.5;
@@ -22,26 +22,26 @@
             /* Events */ 
 
             video.addEventListener('play', function () {
-                $('.hvideo-control-play', hVideo).removeClass('hicon-play').addClass('hicon-pause');
+                $('.hvid-control-play', hvid).removeClass('hicon-play').addClass('hicon-pause');
             }, false);
 
             video.addEventListener('pause', function () {
-                $('.hvideo-control-play', hVideo).addClass('hicon-play').removeClass('hicon-pause');
-                if(settings['playing-class']) hVideo.removeClass(settings['playing-class']);
+                $('.hvid-control-play', hvid).addClass('hicon-play').removeClass('hicon-pause');
+                if(settings['playing-class']) hvid.removeClass(settings['playing-class']);
             }, false);
 
             video.addEventListener('volumechange', function () {
-                $('.hvideo-control-volumebar', hVideo).val(video.volume);
+                $('.hvid-control-volumebar', hvid).val(video.volume);
                 if(video.volume <= 0){
-                    $('.hvideo-control-volume', hVideo).removeClass('hicon-volume').addClass('hicon-volume-mute');
+                    $('.hvid-control-volume', hvid).removeClass('hicon-volume').addClass('hicon-volume-mute');
                 }else{
-                    $('.hvideo-control-volume', hVideo).addClass('hicon-volume').removeClass('hicon-volume-mute');
+                    $('.hvid-control-volume', hvid).addClass('hicon-volume').removeClass('hicon-volume-mute');
                 }
             }, false);
 
             video.addEventListener('playing', function () {
-                hVideo.addClass('hvideo-playing');
-                if(settings['playing-class']) hVideo.addClass(settings['playing-class']);
+                hvid.addClass('hvid-playing');
+                if(settings['playing-class']) hvid.addClass(settings['playing-class']);
             }, false);
 
             video.addEventListener('timeupdate', function () {
@@ -140,8 +140,8 @@
                     error = true;
                 }
                 if(!error){
-                    hVideo.addClass('hvideo-fullscreened');
-                    if(settings['fullscreen-class']) hVideo.addClass(settings['fullscreen-class']);
+                    hvid.addClass('hvid-fullscreened');
+                    if(settings['fullscreen-class']) hvid.addClass(settings['fullscreen-class']);
                     return true;
                 }
                 return false;
@@ -161,8 +161,8 @@
                     error = true;
                 }
                 if(!error){
-                    hVideo.removeClass('hvideo-fullscreened');
-                    if(settings['fullscreen-class']) hVideo.removeClass(settings['fullscreen-class']);
+                    hvid.removeClass('hvid-fullscreened');
+                    if(settings['fullscreen-class']) hvid.removeClass(settings['fullscreen-class']);
                     return true;
                 }
                 return false;
@@ -171,12 +171,12 @@
             this.updateBufferBar = function(){
                 var buffered = this.getBuffered();
                 if(buffered >= 99.99){
-                    $('.hvideo-buffer', hVideo).css({
+                    $('.hvid-buffer', hvid).css({
                         'width': '100%'
                     });
                     this.bufferCompleted = true;
                 }else{
-                    $('.hvideo-buffer', hVideo).css({
+                    $('.hvid-buffer', hvid).css({
                         'width': buffered+'%'
                     });
                 }
@@ -185,18 +185,18 @@
             this.updateProgressBar = function(){
                 var completed = this.playedPercentage();
                 if(completed >= 99.99){
-                    $('.hvideo-progress', hVideo).css({
+                    $('.hvid-progress', hvid).css({
                         'width': '100%'
                     });
                 }else{
-                    $('.hvideo-progress', hVideo).css({
+                    $('.hvid-progress', hvid).css({
                         'width': completed+'%'
                     });
                 }
             }
 
             this.updateTime = function(){
-                $('.hvideo-time', hVideo).html('<span>'+this.getCurrentTime()+'</span>/'+this.getTotalTime());
+                $('.hvid-time', hvid).html('<span>'+this.getCurrentTime()+'</span>/'+this.getTotalTime());
             }
             
 
@@ -212,7 +212,7 @@
 
                 var dataAr = i.split(/(?=[A-Z])/).map(function(v){ return v.toLowerCase() });
 
-                if(dataAr.splice(0,1)[0] === 'hvideo'){
+                if(dataAr.splice(0,1)[0] === 'hvid'){
                     $thisData[dataAr.join('-')] = $this.data(i);
                 }
 
@@ -220,24 +220,24 @@
             var settings = $.extend( {}, opts, $thisData );
 
             $this.removeAttr('controls');
-            $this.wrap('<div class="hvideo-wrap"></div>');
-            var hVideo = $this.parent('.hvideo-wrap');
+            $this.wrap('<div class="hvid-wrap"></div>');
+            var hvid = $this.parent('.hvid-wrap');
 
-            if(settings['wrap-class']) hVideo.addClass(settings['wrap-class']);
+            if(settings['wrap-class']) hvid.addClass(settings['wrap-class']);
 
-            hVideo.css({
+            hvid.css({
                 'position': 'relative',
                 'padding-bottom': 52,
                 'background': settings['video-background']
             }).append($(settings.playerHTML));
 
-            var video = new videoClass(that, hVideo, settings);
+            var video = new videoClass(that, hvid, settings);
 
             var updateVideo = setInterval(function(){
                 video.updateBufferBar();
             }, 500);
 
-            $('.hvideo-control-volume', hVideo).on('click', function(){
+            $('.hvid-control-volume', hvid).on('click', function(){
                 var _this = $(this);
                 if(video.volume() > 0){
                     video.mute();
@@ -246,7 +246,7 @@
                 }
             });
 
-            $('.hvideo-control-play', hVideo).on('click', function(){
+            $('.hvid-control-play', hvid).on('click', function(){
                 var _this = $(this);
                 if(video.isPalying()) {
                     video.pause();
@@ -256,21 +256,21 @@
                 }
             });
 
-            $('.hvideo-control-fullscreen', hVideo).on('click', function(){
+            $('.hvid-control-fullscreen', hvid).on('click', function(){
                 var _this = $(this);
-                if(hVideo.hasClass('hvideo-fullscreened')){
+                if(hvid.hasClass('hvid-fullscreened')){
                     video.exitFullScreen();
                 }else{
                     video.fullScreen();
                 }
             });
 
-            $('.hvideo-control-volumebar', hVideo).on('change', function(){
+            $('.hvid-control-volumebar', hvid).on('change', function(){
                 video.volume($(this).val());
             });
 
             if(settings['volumebar-class']) {
-                $('.hvideo-control-volumebar', hVideo).addClass(settings['volumebar-class'])
+                $('.hvid-control-volumebar', hvid).addClass(settings['volumebar-class'])
             };
 
 
@@ -280,21 +280,21 @@
     };
 })(jQuery);
 
-$.fn.hvideo.defaults = {
+$.fn.hvid.defaults = {
     "playerHTML" : "\
-        <div class='hvideo-controls controls clearfix'>\
-            <div class='hvideo-slider slider'>\
-                <div class='hvideo-handle handle'></div>\
-                <div class='hvideo-progress progress'></div>\
-                <div class='hvideo-buffer buffer'></div>\
+        <div class='hvid-controls controls clearfix'>\
+            <div class='hvid-slider slider'>\
+                <div class='hvid-handle handle'></div>\
+                <div class='hvid-progress progress'></div>\
+                <div class='hvid-buffer buffer'></div>\
             </div>\
-            <a class='hicon-play hovericon f-left hvideo-control-play'></a>\
-            <a class='hicon-fullscreen hovericon f-right hvideo-control-fullscreen'></a>\
+            <a class='hicon-play hovericon f-left hvid-control-play'></a>\
+            <a class='hicon-fullscreen hovericon f-right hvid-control-fullscreen'></a>\
             <div class='f-right volume-box'>\
-                <input type='range' class='hvideo-control-volumebar' value='1' min='0' max='1' step='0.1'>\
-                <a class='hicon-volume hovericon hvideo-control-volume volume'></a>\
+                <input type='range' class='hvid-control-volumebar' value='1' min='0' max='1' step='0.1'>\
+                <a class='hicon-volume hovericon hvid-control-volume volume'></a>\
             </div>\
-            <div class='f-right hvideo-time time'><span>4:15</span>/9:23</div>\
+            <div class='f-right hvid-time time'><span>4:15</span>/9:23</div>\
         </div>\
     ",
     'video-background': '#000',
